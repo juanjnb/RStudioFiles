@@ -69,8 +69,9 @@ table(folksSurvive3rd$Sex)
 
 folksSurvive3rd$Sex <- as.factor(folksSurvive3rd$Sex)
 ggplot(folksSurvive3rd, aes(x = folksSurvive3rd$Sex, fill = factor(folksSurvive3rd$Survived)))+
-  geom_bar(stat = "count") +
+  stat_count(width = 0.5) +
   xlab("Sex") +
+  ggtitle ("Distribution of survival rate in 3rd class based on sex")
   ylab("Total Count") +
   labs(fill = "Survived")
 
@@ -104,3 +105,30 @@ mrses [1:5, ]
 males <- data.combined[which(data.combined$Sex == "male"),]
 males [1:5, ]
 
+# Extracting the "title" information from the name and adding it as a column to the data.combine dataset.
+
+extractTitle <- function(name){
+  name <- as.character(name)
+  if (length(grep("Miss.",name)) > 0){
+    return ("Miss.")
+  }
+  else if (length(grep("Mrs.",name)) > 0){
+    return ("Mrs.")
+  }
+  else if (length(grep("Mr.",name)) > 0){
+    return ("Mr.")
+  }
+  else if (length(grep("Master.",name)) > 0){
+    return ("Master.")
+  }
+  else{
+    return ("Other")
+  }
+}
+
+titles <- NULL
+for (i in 1:nrow(data.combined)){
+  #titles <- c(titles, extractTitle(data.combined$Name[i]))
+  titles [i] <- extractTitle(data.combined$Name[i])
+}
+data.combined$Title <- as.factor(titles)
